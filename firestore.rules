@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /entries/{entryId} {
+      // Lecture et ecriture ouvertes a tout le monde (site collaboratif public).
+      // Champs valides seulement, tailles limitees pour eviter les abus grossiers.
+      allow read: if true;
+      allow create: if request.resource.data.numero is number
+        && request.resource.data.contenu is string
+        && request.resource.data.contenu.size() <= 120
+        && request.resource.data.pseudo is string
+        && request.resource.data.pseudo.size() <= 30;
+      allow update: if request.resource.data.numero is number
+        && request.resource.data.contenu is string
+        && request.resource.data.contenu.size() <= 120;
+      allow delete: if true;
+    }
+  }
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chasse au trésor - Cartons de Krayn</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Chasse au trésor - Cartons de Krayn</h1>
+    <p class="subtitle">Liste collaborative : chaque carton ouvert, ce qu'il contient, sa valeur et si c'est un stretch goal.</p>
+  </header>
+
+  <main>
+    <section class="stats" id="stats"></section>
+
+    <section class="form-section">
+      <h2>Ajouter / mettre à jour un carton</h2>
+      <form id="entry-form">
+        <input type="hidden" id="entry-id" />
+        <div class="row">
+          <label>
+            N° du carton
+            <input type="number" id="numero" min="1" required />
+          </label>
+          <label>
+            Pseudo (optionnel)
+            <input type="text" id="pseudo" placeholder="Anonyme" maxlength="30" />
+          </label>
+        </div>
+
+        <label>
+          Contenu du carton
+          <input type="text" id="contenu" placeholder="Ex: figurine XYZ" required maxlength="120" />
+        </label>
+
+        <div class="row">
+          <label>
+            Valeur trouvée (sur internet)
+            <input type="text" id="valeur" placeholder="Ex: 45€" maxlength="60" />
+          </label>
+          <label>
+            Lien source (optionnel)
+            <input type="url" id="lien" placeholder="https://..." />
+          </label>
+        </div>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="stretch" />
+          Stretch goal
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" id="submit-btn">Ajouter</button>
+          <button type="button" id="cancel-edit" class="secondary" hidden>Annuler la modification</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <div class="list-header">
+        <h2>Cartons enregistrés</h2>
+        <input type="search" id="search" placeholder="Filtrer (numéro, contenu, pseudo...)" />
+      </div>
+      <div class="table-wrapper">
+        <table id="entries-table">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Contenu</th>
+              <th>Valeur</th>
+              <th>Source</th>
+              <th>Stretch goal</th>
+              <th>Ajouté par</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="entries-body">
+            <tr><td colspan="7" class="empty-row">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Site ouvert à tous en écriture — merci de rester respectueux et de ne pas supprimer les entrées des autres sans raison.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
