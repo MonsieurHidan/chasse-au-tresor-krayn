@@ -8,8 +8,6 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  query,
-  orderBy,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -44,7 +42,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const payload = {
-    numero: Number(numeroField.value),
+    numero: numeroField.value.trim().toUpperCase(),
     contenu: contenuField.value.trim(),
     valeur: valeurField.value.trim(),
     lien: lienField.value.trim(),
@@ -93,6 +91,20 @@ async function removeEntry(entry) {
   } catch (err) {
     alert("Erreur lors de la suppression : " + err.message);
   }
+}
+
+function parseNumero(numero) {
+  const s = String(numero ?? "");
+  const m = s.match(/^(\d+)(.*)$/);
+  if (m) return { num: parseInt(m[1], 10), suffix: m[2].toUpperCase() };
+  return { num: Number.POSITIVE_INFINITY, suffix: s.toUpperCase() };
+}
+
+function compareNumero(a, b) {
+  const pa = parseNumero(a.numero);
+  const pb = parseNumero(b.numero);
+  if (pa.num !== pb.num) return pa.num - pb.num;
+  return pa.suffix.localeCompare(pb.suffix);
 }
 
 function escapeHtml(str) {
@@ -167,11 +179,12 @@ tbody.addEventListener("click", (e) => {
   if (btn.dataset.action === "delete") removeEntry(entry);
 });
 
-const entriesQuery = query(entriesRef, orderBy("numero", "asc"));
 onSnapshot(
-  entriesQuery,
+  entriesRef,
   (snapshot) => {
-    allEntries = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    allEntries = snapshot.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort(compareNumero);
     render();
   },
   (err) => {

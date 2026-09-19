@@ -22,13 +22,14 @@
         <div class="row">
           <label>
             N° du carton
-            <input type="number" id="numero" min="1" required />
+            <input type="text" id="numero" placeholder="Ex: 12 ou 12B" pattern="[0-9]+[A-Za-z]*" title="Un numéro, éventuellement suivi d'une lettre (ex: 12, 12A, 12B)" maxlength="10" required />
           </label>
           <label>
             Pseudo (optionnel)
             <input type="text" id="pseudo" placeholder="Anonyme" maxlength="30" />
           </label>
         </div>
+        <p class="hint">Ajoute une lettre si plusieurs cartons contiennent la même chose (ex: 12, 12A, 12B).</p>
 
         <label>
           Contenu du carton

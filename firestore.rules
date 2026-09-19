@@ -1,16 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // numero accepte un nombre (anciennes entrees) ou un texte comme "12B"
+    // (nouvelles entrees, pour distinguer plusieurs cartons du meme objet).
+    function validNumero(n) {
+      return n is number || (n is string && n.size() > 0 && n.size() <= 10);
+    }
+
     match /entries/{entryId} {
       // Lecture et ecriture ouvertes a tout le monde (site collaboratif public).
       // Champs valides seulement, tailles limitees pour eviter les abus grossiers.
       allow read: if true;
-      allow create: if request.resource.data.numero is number
+      allow create: if validNumero(request.resource.data.numero)
         && request.resource.data.contenu is string
         && request.resource.data.contenu.size() <= 120
         && request.resource.data.pseudo is string
         && request.resource.data.pseudo.size() <= 30;
-      allow update: if request.resource.data.numero is number
+      allow update: if validNumero(request.resource.data.numero)
         && request.resource.data.contenu is string
         && request.resource.data.contenu.size() <= 120;
       allow delete: if true;
